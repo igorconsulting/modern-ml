@@ -1,0 +1,19 @@
+[project]
+name = "modern-ml"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    "pandas",
+    "catboost",
+    "seaborn",
+    "shap",
+    "optuna",
+    "mlflow",
+    "nixtla",
+    "mapie",
+    "arfs",
+    "kaggle"
+]
