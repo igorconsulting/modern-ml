@@ -15,5 +15,6 @@ dependencies = [
     "nixtla",
     "mapie",
     "arfs",
-    "kaggle"
+    "kaggle",
+    "notebook>=7.3.2",
 ]
