@@ -1,0 +1,128 @@
+import numpy as np
+import pandas as pd
+import gc
+from tqdm import tqdm
+from sklearn.metrics import log_loss, roc_auc_score, average_precision_score, brier_score_loss, precision_recall_curve
+from sklearn.inspection import permutation_importance
+from sklearn.calibration import calibration_curve
+import seaborn as sns
+import shap
+import matplotlib.pyplot as plt
+
+
+def reduce_mem_usage(df):
+    start_mem = df.memory_usage().sum() / 1024**2
+    print('Memory usage of dataframe is {:.2f} MB'.format(start_mem))
+
+    for col in df.columns:
+        col_type = df[col].dtype
+    if col_type != object:
+            c_min = df[col].min()
+            c_max = df[col].max()
+            if str(col_type)[:3] == 'int':
+                if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
+                    df[col] = df[col].astype(np.int8)
+                elif c_min > np.iinfo(np.uint8).min and c_max < np.iinfo(np.uint8).max:
+                    df[col] = df[col].astype(np.uint8)
+                elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                    df[col] = df[col].astype(np.int16)
+                elif c_min > np.iinfo(np.uint16).min and c_max < np.iinfo(np.uint16).max:
+                    df[col] = df[col].astype(np.uint16)
+                elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                    df[col] = df[col].astype(np.int32)
+                elif c_min > np.iinfo(np.uint32).min and c_max < np.iinfo(np.uint32).max:
+                    df[col] = df[col].astype(np.uint32)
+                elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
+                    df[col] = df[col].astype(np.int64)
+                elif c_min > np.iinfo(np.uint64).min and c_max < np.iinfo(np.uint64).max:
+                    df[col] = df[col].astype(np.uint64)
+            elif str(col_type)[:5] == 'float':
+                if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
+                    df[col] = df[col].astype(np.float16)
+                elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                    df[col] = df[col].astype(np.float32)
+                else:
+                    df[col] = df[col].astype(np.float64)
+
+    end_mem = df.memory_usage().sum() / 1024**2
+    print('Memory usage after optimization is: {:.2f} MB'.format(end_mem))
+    print('Decreased by {:.1f}%'.format(100 * (start_mem - end_mem) / start_mem))
+    return df
+
+
+def clf_metric_report(y_score, y_true):
+    print('Evaluating the model...')
+    logloss = log_loss(y_true, y_score)
+    roc_auc = roc_auc_score(y_true, y_score)
+    avg_precision = average_precision_score(y_true, y_score)
+    brier = brier_score_loss(y_true, y_score)
+
+    print(f'Log Loss: {logloss}')
+    print(f'ROC AUC: {roc_auc}')
+    print(f'Average Precision: {avg_precision}')
+    print(f'Brier Score: {brier}')
+
+def compute_and_plot_permutation_importance(model, X_test, y_test, metric='average_precision', n_repeats=5):
+    # Calculate permutation importance
+    result = permutation_importance(model, X_test, y_test, n_repeats=n_repeats, random_state=42, scoring=metric)
+    features = X_test.columns.to_list()
+
+    # Sort features by importance
+    feature_importance = pd.DataFrame({'feature': features, 'importance': result.importances_mean})
+    feature_importance = feature_importance.sort_values('importance', ascending=False)
+
+    # Plot top 20 most important features using seaborn
+    plt.figure(figsize=(10, 12))
+    sns.barplot(data=feature_importance, y='feature', x='importance')
+    plt.xlabel('Permutation Importance')
+    plt.ylabel('Features')
+    plt.title('Top 20 Most Important Features')
+    plt.tight_layout()
+    plt.show()
+    return feature_importance
+
+def plot_calibration_curve(y_score, y_true):
+    prob_true, prob_pred = calibration_curve(y_score, y_true, n_bins=10)
+    plt.figure(figsize=(6, 6))
+    plt.plot(prob_pred, prob_true, marker='.')
+    plt.plot([0, 1], [0, 1], linestyle='--')
+    plt.xlabel('Predicted Probability')
+    plt.ylabel('True Probability')
+    plt.title('Calibration Curve')
+    plt.show()
+
+def plot_pr_calib_curve(y_score, y_true):
+    precision, recall, _ = precision_recall_curve(y_score, y_true)
+    prob_true, prob_pred = calibration_curve(y_score, y_true, n_bins=10)
+
+    plt.figure(figsize=(12, 5))
+
+    plt.subplot(1, 2, 1)
+    plt.plot(recall, precision, marker='.')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Precision-Recall Curve')
+
+    plt.subplot(1, 2, 2)
+    plt.plot(prob_pred, prob_true, marker='.')
+    plt.plot([0, 1], [0, 1], linestyle='--')
+    plt.xlabel('Predicted Probability')
+    plt.ylabel('True Probability')
+    plt.title('Calibration Curve')
+
+    plt.tight_layout()
+    plt.show()
+
+def plot_dis_probs(y_score, y_true):
+    plt.figure(figsize=(10, 6))
+    sns.histplot(y_score[y_true == 1], bins=50, color='red', label='Churn', kde=True)
+    sns.histplot(y_score[y_true == 0], bins=50, color='blue', label='Non-Churn', kde=True)
+    plt.xlabel('Predicted Probability')
+    plt.ylabel('Frequency')
+    plt.title('Distribution of Predicted Probabilities for Churn vs Non-Churn')
+    plt.legend()
+    plt.show()
+
+def plot_shap_values(shap_values, X_test, figsize=(10, 12)):
+    plt.figure(figsize=figsize)
+    shap.summary_plot(shap_values, X_test, plot_type='bar', max_display=20)

@@ -17,4 +17,6 @@ dependencies = [
     "arfs",
     "kaggle",
     "notebook>=7.3.2",
+    "fasttreeshap>=0.1.6",
+    "tqdm>=4.67.1",
 ]
