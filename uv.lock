@@ -1451,6 +1451,7 @@ dependencies = [
     { name = "seaborn" },
     { name = "shap" },
     { name = "tqdm" },
+    { name = "venn-abers" },
 ]
 
 [package.metadata]
@@ -1468,6 +1469,7 @@ requires-dist = [
     { name = "seaborn" },
     { name = "shap" },
     { name = "tqdm", specifier = ">=4.67.1" },
+    { name = "venn-abers", specifier = ">=1.4.6" },
 ]
 
 [[package]]
@@ -2751,6 +2753,17 @@ sdist = { url = "https://files.pythonhosted.org/packages/a3/24/b6f8c2b022e41fbe4
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a7/c7/d90715b5cc1ab5b6cb04349b1b9aeba910cd3335877b95fa67a981145755/utilsforecast-0.2.10-py3-none-any.whl", hash = "sha256:ee7860f18a6df5dd695b51e603f3866a00dd0da0eb6c12d07f052e54390cf1a7", size = 41658 },
 ]
+
+[[package]]
+name = "venn-abers"
+version = "1.4.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "scikit-learn" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/45/67/e817f015981fd6d6e6a7e4ee0c77d81228edce22de1d147633f598643b81/venn-abers-1.4.6.tar.gz", hash = "sha256:358fce6de61e9990b90fa384437a90244598e8d3442b7132d4bba428b0d07f7d", size = 12842 }
 
 [[package]]
 name = "waitress"

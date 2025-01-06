@@ -16,33 +16,44 @@ def reduce_mem_usage(df):
 
     for col in df.columns:
         col_type = df[col].dtype
-    if col_type != object:
-            c_min = df[col].min()
-            c_max = df[col].max()
-            if str(col_type)[:3] == 'int':
-                if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
-                    df[col] = df[col].astype(np.int8)
-                elif c_min > np.iinfo(np.uint8).min and c_max < np.iinfo(np.uint8).max:
-                    df[col] = df[col].astype(np.uint8)
-                elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
-                    df[col] = df[col].astype(np.int16)
-                elif c_min > np.iinfo(np.uint16).min and c_max < np.iinfo(np.uint16).max:
-                    df[col] = df[col].astype(np.uint16)
-                elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
-                    df[col] = df[col].astype(np.int32)
-                elif c_min > np.iinfo(np.uint32).min and c_max < np.iinfo(np.uint32).max:
-                    df[col] = df[col].astype(np.uint32)
-                elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
-                    df[col] = df[col].astype(np.int64)
-                elif c_min > np.iinfo(np.uint64).min and c_max < np.iinfo(np.uint64).max:
-                    df[col] = df[col].astype(np.uint64)
-            elif str(col_type)[:5] == 'float':
-                if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
-                    df[col] = df[col].astype(np.float16)
-                elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
-                    df[col] = df[col].astype(np.float32)
-                else:
-                    df[col] = df[col].astype(np.float64)
+        if (col_type != object) and (str(col_type) != 'category'):
+                c_min = df[col].min()
+                c_max = df[col].max()
+                if str(col_type)[:3] == 'int':
+                    if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
+                        df[col] = df[col].astype(np.int8)
+                        print(f"Casting column {col} to {str(np.int8)}")
+                    elif c_min > np.iinfo(np.uint8).min and c_max < np.iinfo(np.uint8).max:
+                        df[col] = df[col].astype(np.uint8)
+                        print(f"Casting column {col} to {str(np.uint8)}")
+                    elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                        df[col] = df[col].astype(np.int16)
+                        print(f"Casting column {col} to {str(np.int16)}")
+                    elif c_min > np.iinfo(np.uint16).min and c_max < np.iinfo(np.uint16).max:
+                        df[col] = df[col].astype(np.uint16)
+                        print(f"Casting column {col} to {str(np.uint16)}")
+                    elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                        df[col] = df[col].astype(np.int32)
+                        print(f"Casting column {col} to {str(np.int32)}")
+                    elif c_min > np.iinfo(np.uint32).min and c_max < np.iinfo(np.uint32).max:
+                        df[col] = df[col].astype(np.uint32)
+                        print(f"Casting column {col} to {str(np.uint32)}")
+                    elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
+                        df[col] = df[col].astype(np.int64)
+                        print(f"Casting column {col} to {str(np.int64)}")
+                    elif c_min > np.iinfo(np.uint64).min and c_max < np.iinfo(np.uint64).max:
+                        df[col] = df[col].astype(np.uint64)
+                        print(f"Casting column {col} to {str(np.uint64)}")
+                elif str(col_type)[:5] == 'float':
+                    if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
+                        df[col] = df[col].astype(np.float16)
+                        print(f"Casting column {col} to {str(np.float16)}")
+                    elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                        df[col] = df[col].astype(np.float32)
+                        print(f"Casting column {col} to {str(np.float32)}")
+                    else:
+                        df[col] = df[col].astype(np.float64)
+                        print(f"Casting column {col} to {str(np.float64)}")
 
     end_mem = df.memory_usage().sum() / 1024**2
     print('Memory usage after optimization is: {:.2f} MB'.format(end_mem))
@@ -52,15 +63,14 @@ def reduce_mem_usage(df):
 
 def clf_metric_report(y_score, y_true):
     print('Evaluating the model...')
-    logloss = log_loss(y_true, y_score)
     roc_auc = roc_auc_score(y_true, y_score)
-    avg_precision = average_precision_score(y_true, y_score)
     brier = brier_score_loss(y_true, y_score)
-
-    print(f'Log Loss: {logloss}')
+    avg_precision = average_precision_score(y_true, y_score)
+    logloss = log_loss(y_true, y_score)
     print(f'ROC AUC: {roc_auc}')
-    print(f'Average Precision: {avg_precision}')
     print(f'Brier Score: {brier}')
+    print(f'Average Precision: {avg_precision}')
+    print(f'Log Loss: {logloss}')
 
 def compute_and_plot_permutation_importance(model, X_test, y_test, metric='average_precision', n_repeats=5):
     # Calculate permutation importance
@@ -92,8 +102,8 @@ def plot_calibration_curve(y_score, y_true):
     plt.show()
 
 def plot_pr_calib_curve(y_score, y_true):
-    precision, recall, _ = precision_recall_curve(y_score, y_true)
-    prob_true, prob_pred = calibration_curve(y_score, y_true, n_bins=10)
+    precision, recall, _ = precision_recall_curve(y_true, y_score)
+    prob_true, prob_pred = calibration_curve(y_true, y_score, n_bins=10)
 
     plt.figure(figsize=(12, 5))
 
@@ -115,14 +125,14 @@ def plot_pr_calib_curve(y_score, y_true):
 
 def plot_dis_probs(y_score, y_true):
     plt.figure(figsize=(10, 6))
-    sns.histplot(y_score[y_true == 1], bins=50, color='red', label='Churn', kde=True)
-    sns.histplot(y_score[y_true == 0], bins=50, color='blue', label='Non-Churn', kde=True)
+    sns.histplot(y_score[y_true == 1], bins=50, color='red', label='Churn', kde=True, stat='density')
+    sns.histplot(y_score[y_true == 0], bins=50, color='blue', label='Non-Churn', kde=True, stat='density')
     plt.xlabel('Predicted Probability')
     plt.ylabel('Frequency')
     plt.title('Distribution of Predicted Probabilities for Churn vs Non-Churn')
     plt.legend()
     plt.show()
 
-def plot_shap_values(shap_values, X_test, figsize=(10, 12)):
-    plt.figure(figsize=figsize)
-    shap.summary_plot(shap_values, X_test, plot_type='bar', max_display=20)
+def plot_shap_values(shap_values, X_test, figsize=(10, 12), type='bar'):
+    #plt.figure(figsize=figsize)
+    shap.summary_plot(shap_values, X_test, plot_type='bar', max_display=25)
