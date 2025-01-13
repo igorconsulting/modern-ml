@@ -16,7 +16,8 @@
 * [Comparing calibrations](https://www.diva-portal.org/smash/get/diva2:1603345/FULLTEXT01.pdf)
 * [Tutorial Venn Predictors](https://cml.rhul.ac.uk/people/ptocca/HomePage/Toccaceli_CP___Venn_Tutorial.pdf)
 * [Gentle Intro to conformal prediction](https://arxiv.org/pdf/2107.07511)
-  
+* [Venn Abers Python Lib](https://github.com/ip200/venn-abers)  
+
 ## Kaggle Links
 * [Churn Competition](https://www.kaggle.com/code/paddykb/neo-bank-quacking-the-case)
 
