@@ -107,6 +107,12 @@ uv remove package_name
 
 # Sync environment with lock file
 uv sync
+
+# Use pip from uv
+uv pip [command name]
+
+# Generate a requirements from UV
+uv pip freeze > requirements.txt
 ```
 
 ## Troubleshooting

@@ -91,14 +91,14 @@ def compute_and_plot_permutation_importance(model, X_test, y_test, metric='avera
     plt.show()
     return feature_importance
 
-def plot_calibration_curve(y_score, y_true):
+def plot_calibration_curve(y_score, y_true, title='Calibration Curve'):
     prob_true, prob_pred = calibration_curve(y_score, y_true, n_bins=10)
     plt.figure(figsize=(6, 6))
     plt.plot(prob_pred, prob_true, marker='.')
     plt.plot([0, 1], [0, 1], linestyle='--')
     plt.xlabel('Predicted Probability')
     plt.ylabel('True Probability')
-    plt.title('Calibration Curve')
+    plt.title(title)
     plt.show()
 
 def plot_pr_calib_curve(y_score, y_true):
