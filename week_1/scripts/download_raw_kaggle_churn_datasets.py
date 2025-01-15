@@ -21,7 +21,7 @@ def download_kaggle_dataset():
 
     # Download all files from the competition
     print('downloading files...')
-    api.competition_download_files(competition_name, path=download_path)
+    api.dataset_download_files(competition_name, path=download_path)
 
     # Unzip the downloaded files
     print('unzipping files...')

@@ -17,7 +17,10 @@
 * [Tutorial Venn Predictors](https://cml.rhul.ac.uk/people/ptocca/HomePage/Toccaceli_CP___Venn_Tutorial.pdf)
 * [Gentle Intro to conformal prediction](https://arxiv.org/pdf/2107.07511)
 * [Venn Abers Python Lib](https://github.com/ip200/venn-abers)  
-
+* [Venn Abers Predictor](https://arxiv.org/pdf/1211.0025)
+* [Large-scale probabilistic prediction withand without validity guarantees](https://arxiv.org/pdf/1511.00213)
+* [Probabilistic Prediction in scikit-learn](https://www.diva-portal.org/smash/get/diva2:1603345/FULLTEXT01.pdf)
+* 
 ## Kaggle Links
 * [Churn Competition](https://www.kaggle.com/code/paddykb/neo-bank-quacking-the-case)
 
@@ -28,8 +31,12 @@
 * [https://arxiv.org/pdf/2410.19098](https://arxiv.org/pdf/2410.19098) 
 * [Introt to Gradient Boosting](https://explained.ai/gradient-boosting/L2-loss.html#sec:2.1)
 
-### Forecasting
+### Forecasting and Time Series 
 * [Compreensive Guide for Forecasting with  ML](https://cbergmeir.com/talks/FFDS_ACML2020.pdf)
+* [Skforecast: time series forecasting with Python, Machine Learning and Scikit-learn](https://cienciadedatos.net/documentos/py27-time-series-forecasting-python-scikitlearn)
 
 ### Catboost for Other contexts
 * [Catboost for learning to rank](https://tech.deliveryhero.com/is-catboost-faster-than-lightgbm-and-xgboost/)
+
+### AI and Prompt Engineering
+* [Good Prompt Practicies With Open AI](https://platform.openai.com/docs/guides/prompt-engineering)

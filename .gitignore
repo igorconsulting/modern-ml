@@ -173,7 +173,12 @@ cython_debug/
 # Ignore all content of the week_1/data/raw and week_1/data/processed folders
 week_1/data/raw/*
 week_1/data/processed/*
+case/data/raw/*
+case/data/processed/*
 
 # Keep the folders
 !week_1/data/raw/
 !week_1/data/processed/
+!case/data/raw/
+!case/data/processed/
+
