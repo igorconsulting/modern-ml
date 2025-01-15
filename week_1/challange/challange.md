@@ -2,11 +2,13 @@
 
 ### Objective
 
-Your task is to create a Kaggle notebook (`9_generate_full_training.ipynb`) that synthesizes all the steps from the week_1 notebooks to build a complete submission for the Neo Bank Churn Prediction competition. This notebook should be designed to run on Kaggle.
+Your task is to create a Kaggle notebook (`9_generate_full_training.ipynb`) that synthesizes all the steps from the week_1 notebooks to build a complete submission for the Neo Bank Churn Prediction competition. This notebook should be designed to run on Kaggle. Inside
 
-Competition link: [Neo Bank Churn Prediction](https://www.kaggle.com/competitions/neo-bank-non-sub-churn-prediction/data)
+Read the competition instructions, link: [Neo Bank Churn Prediction](https://www.kaggle.com/competitions/neo-bank-non-sub-churn-prediction/data)
 
-### Instructions
+Try your best to be ranked in the leader board. Put the link of your kaggle submision in the course assingments checkilist: https://docs.google.com/spreadsheets/d/1AvcCXJ5ularY51SaUmc24VLHx7OqTKYNQkqWU4DMqh4
+
+### PROMPT with instructions to use the Copilot Chat Editor to build a full notebook that can be uploaded or copy pasted to kaggle (Did not work well, maybe in Coursor it could work better)
 
 1. **Load Data**: Load all the Parquet raw data, including train and test datasets, and merge them. Refer to `week_1/notebooks/3_define_churn.ipynb` for guidance. Reduce memory usage by properly defining the types. The train data has the publicly available data, and the test  data should only be used for submission to the leaderboard.
 
