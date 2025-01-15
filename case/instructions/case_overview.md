@@ -58,9 +58,9 @@ A data dictionary is available here:
 
 Beyond predicting PD, you must propose a policy to decide which customers to approve or reject. This policy should be based on **expected losses**, defined as:
 
-\[
+$$
 \text{Losses}(x) = \text{PD}(x) \times \text{EAD}(x) \times \text{LGD}(x).
-\]
+$$
 
 - **PD** (Probability of Default) will come from your ML model.  
 - **EAD** (Exposure at Default) and **LGD** (Loss Given Default) can be estimated from an out-of-sample calibration (or validation) set within the training data. They can be:
@@ -86,5 +86,6 @@ calibration_df['losses'] = (
     - calibration_df.total_pymnt 
     + calibration_df['recoveries']
 )
+```
 
 This youtube lesson could help on this step: [Criando políticas de crédito com um modelo de Machine Learning](https://www.youtube.com/watch?v=651SAEG7Lkw&t=1s)
