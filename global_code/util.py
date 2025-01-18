@@ -10,56 +10,49 @@ import shap
 import matplotlib.pyplot as plt
 
 
-def reduce_mem_usage(df):
+def reduce_mem_usage(df, verbose=False):
     start_mem = df.memory_usage().sum() / 1024**2
     print('Memory usage of dataframe is {:.2f} MB'.format(start_mem))
 
     for col in df.columns:
         col_type = df[col].dtype
         if (col_type != object) and (str(col_type) != 'category'):
-                c_min = df[col].min()
-                c_max = df[col].max()
-                if str(col_type)[:3] == 'int':
-                    if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
-                        df[col] = df[col].astype(np.int8)
-                        print(f"Casting column {col} to {str(np.int8)}")
-                    elif c_min > np.iinfo(np.uint8).min and c_max < np.iinfo(np.uint8).max:
-                        df[col] = df[col].astype(np.uint8)
-                        print(f"Casting column {col} to {str(np.uint8)}")
-                    elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
-                        df[col] = df[col].astype(np.int16)
-                        print(f"Casting column {col} to {str(np.int16)}")
-                    elif c_min > np.iinfo(np.uint16).min and c_max < np.iinfo(np.uint16).max:
-                        df[col] = df[col].astype(np.uint16)
-                        print(f"Casting column {col} to {str(np.uint16)}")
-                    elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
-                        df[col] = df[col].astype(np.int32)
-                        print(f"Casting column {col} to {str(np.int32)}")
-                    elif c_min > np.iinfo(np.uint32).min and c_max < np.iinfo(np.uint32).max:
-                        df[col] = df[col].astype(np.uint32)
-                        print(f"Casting column {col} to {str(np.uint32)}")
-                    elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
-                        df[col] = df[col].astype(np.int64)
-                        print(f"Casting column {col} to {str(np.int64)}")
-                    elif c_min > np.iinfo(np.uint64).min and c_max < np.iinfo(np.uint64).max:
-                        df[col] = df[col].astype(np.uint64)
-                        print(f"Casting column {col} to {str(np.uint64)}")
-                elif str(col_type)[:5] == 'float':
-                    if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
-                        df[col] = df[col].astype(np.float16)
-                        print(f"Casting column {col} to {str(np.float16)}")
-                    elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
-                        df[col] = df[col].astype(np.float32)
-                        print(f"Casting column {col} to {str(np.float32)}")
-                    else:
-                        df[col] = df[col].astype(np.float64)
-                        print(f"Casting column {col} to {str(np.float64)}")
+            c_min = df[col].min()
+            c_max = df[col].max()
+            if str(col_type)[:3] == 'int':
+                int_types = [
+                    (np.int8, np.iinfo(np.int8).min, np.iinfo(np.int8).max),
+                    (np.uint8, np.iinfo(np.uint8).min, np.iinfo(np.uint8).max),
+                    (np.int16, np.iinfo(np.int16).min, np.iinfo(np.int16).max),
+                    (np.uint16, np.iinfo(np.uint16).min, np.iinfo(np.uint16).max),
+                    (np.int32, np.iinfo(np.int32).min, np.iinfo(np.int32).max),
+                    (np.uint32, np.iinfo(np.uint32).min, np.iinfo(np.uint32).max),
+                    (np.int64, np.iinfo(np.int64).min, np.iinfo(np.int64).max),
+                    (np.uint64, np.iinfo(np.uint64).min, np.iinfo(np.uint64).max)
+                ]
+                for dtype, min_val, max_val in int_types:
+                    if c_min > min_val and c_max < max_val:
+                        df[col] = df[col].astype(dtype)
+                        if verbose:
+                            print(f"Casting column {col} to {str(dtype)}")
+                        break
+            elif str(col_type)[:5] == 'float':
+                float_types = [
+                    (np.float16, np.finfo(np.float16).min, np.finfo(np.float16).max),
+                    (np.float32, np.finfo(np.float32).min, np.finfo(np.float32).max),
+                    (np.float64, np.finfo(np.float64).min, np.finfo(np.float64).max)
+                ]
+                for dtype, min_val, max_val in float_types:
+                    if c_min > min_val and c_max < max_val:
+                        df[col] = df[col].astype(dtype)
+                        if verbose:
+                            print(f"Casting column {col} to {str(dtype)}")
+                        break
 
     end_mem = df.memory_usage().sum() / 1024**2
     print('Memory usage after optimization is: {:.2f} MB'.format(end_mem))
     print('Decreased by {:.1f}%'.format(100 * (start_mem - end_mem) / start_mem))
     return df
-
 
 def clf_metric_report(y_score, y_true):
     print('Evaluating the model...')
