@@ -19,6 +19,7 @@ lib64/
 parts/
 sdist/
 var/
+week_1/.DS_Store
 wheels/
 share/python-wheels/
 *.egg-info/
